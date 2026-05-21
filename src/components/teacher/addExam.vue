@@ -102,9 +102,25 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import '@/assets/styles/variables.scss';
+
 .add {
-  padding: 0px 40px;
+  padding: 0 var(--spacing-lg);
   width: 400px;
+  max-width: 100%;
+
+  .el-button--primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all var(--transition-duration) var(--transition-function);
+
+    &:hover {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-light);
+    }
+  }
 }
 </style>
 

@@ -109,194 +109,210 @@ export default {
 
 
 <style lang="scss" scoped>
+@import '@/assets/styles/variables.scss';
+
 .pagination {
-  padding: 20px 0px 30px 0px;
+  padding: var(--spacing-lg) 0 var(--spacing-xl) 0;
+
   .el-pagination {
     display: flex;
     justify-content: center;
   }
 }
+
 .paper {
   h4 {
     cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s;
+
+    &:hover {
+      color: var(--primary-color);
+    }
   }
 }
+
 .paper .item a {
-  color: #000;
+  color: var(--text-color);
 }
+
 .wrapper .top .order {
   cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all 0.3s;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+  }
 }
-.wrapper .top .order:hover {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.wrapper .top .order:visited {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
+
+.wrapper .top .order:visited,
 .wrapper .top .order.active {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
 }
+
 .item .info i {
-  margin-right: 5px;
-  color: #0195ff;
+  margin-right: var(--spacing-xs);
+  color: var(--primary-color);
 }
+
 .item .info span {
-  margin-right: 14px;
+  margin-right: var(--spacing-md);
 }
+
 .paper .item {
   width: 310px;
-  border-radius: 4px;
-  padding: 20px 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 4px 2px rgba(217,222,234,0.3);
-  transition: all 0.6s ease;
-  margin: 20px 10px;
+  border-radius: var(--border-radius-medium);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-light-color);
+  box-shadow: var(--shadow-light);
+  transition: all 0.6s var(--transition-function);
+  margin: var(--spacing-md) var(--spacing-sm);
+  background: var(--bg-color);
+
+  &:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+  }
 }
-.paper .item:hover {
-  box-shadow: 0 0 4px 2px rgba(140, 193, 248, 0.45);
-  transform: scale(1.03);
-}
+
 .paper .item .info {
   font-size: 14px;
-  color: #88949b;
+  color: var(--text-color-secondary);
 }
+
 .paper .item .name {
   font-size: 14px;
-  color: #88949b;
+  color: var(--text-color-secondary);
+  margin-top: var(--spacing-xs);
 }
+
 .paper * {
-  margin: 20px 0;
+  margin: var(--spacing-md) 0;
 }
+
 .wrapper .paper {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 }
+
 .top .el-icon-search {
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
 }
+
 .top .icon {
   position: relative;
 }
+
 .wrapper .top {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-light-color);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  flex-wrap: wrap;
 }
+
 #myExam .search-li {
   margin-left: auto;
 }
+
 .top .search-li {
   margin-left: auto;
 }
+
 .top li {
   display: flex;
   align-items: center;
 }
+
 .top .search {
   margin-left: auto;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s var(--transition-function);
+  width: 200px;
+
+  &:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+  }
+
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
 }
-.top .search:hover {
-  color: #0195ff;
-  border-color: #0195ff;
-}
+
 .wrapper .top {
   display: flex;
 }
+
 .wrapper .top li {
-  margin: 20px;
+  margin: var(--spacing-md);
 }
+
 #myExam {
   width: 1000px;
   margin: 0 auto;
+  max-width: 100%;
 }
+
 #myExam .title {
-  margin: 20px;
+  margin: var(--spacing-md);
   display: flex;
   align-items: center;
 }
+
 #myExam .title span {
-  margin-left: 10px;
+  margin-left: var(--spacing-sm);
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-color);
 }
+
 #myExam .wrapper {
-  background-color: #fff;
+  background-color: var(--bg-color);
+  border-radius: var(--border-radius-medium);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-light);
 }
-.wrapper .top .order {
-  cursor: pointer;
+
+@media (max-width: 768px) {
+  #myExam {
+    width: 100%;
+  }
+
+  .paper .item {
+    width: 100%;
+  }
+
+  .wrapper .top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .top .search-li {
+    margin-left: 0;
+    margin-top: var(--spacing-sm);
+    width: 100%;
+  }
+
+  .top .search {
+    width: 100%;
+  }
 }
-.wrapper .top .order:hover {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.wrapper .top .order:visited {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.wrapper .top .order.active {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.item .info i {
-  margin-right: 5px;
-  color: #0195ff;
-}
-.item .info span {
-  margin-right: 14px;
-}
-.paper .item {
-  border-radius: 4px;
-  padding: 20px 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 4px 2px rgba(217,222,234,0.3);
-  transition: all 0.6s ease;
-}
-.paper .item:hover {
-  box-shadow: 0 0 4px 2px rgba(140, 193, 248, 0.45)
-}
-.paper .item .info {
-  font-size: 14px;
-  color: #88949b;
-}
-.paper .item .name {
-  font-size: 14px;
-  color: #88949b;
-}
-.paper * {
-  margin: 20px 0;
-}
-.wrapper .paper {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.top .el-icon-search {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-.top .icon {
-  position: relative;
-}
-.wrapper .top {
-  border-bottom: 1px solid #eee;
-}
-#myExam .search-li {
-  margin-left: auto;
-}
-.top .search-li {
-  margin-left: auto;
-}
+</style>
 .top li {
   display: flex;
   align-items: center;

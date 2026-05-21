@@ -69,49 +69,62 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import '@/assets/styles/variables.scss';
+
 .el-menu-vertical-demo .el-submenu__title {
   overflow: hidden;
 }
+
 .left-width .iconfont {
   font-size: 18px;
   color: #fff;
 }
+
 .left-width {
   width: 213px;
 }
+
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   min-height: 900px;
 }
+
 #left {
   height: 900px;
-  background-color: #304156;
+  background-color: var(--bg-color-page);
   z-index: 0;
 }
+
 #left .el-menu-vertical-demo .title {
   color: #fff;
   font-size: 16px;
   font-weight: bold;
   margin-left: 14px;
 }
+
 .el-submenu {
-  border-bottom: 1px solid #475669 !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
+
 .el-submenu__title:hover {
-  background-color: #1890ff;
+  background-color: var(--primary-color) !important;
 }
+
 .el-submenu__title i {
-    color: #fbfbfc !important;
+  color: #fbfbfc !important;
 }
+
 .el-menu-item {
   color: #fff !important;
 }
+
 .el-menu-item:hover {
-  background-color: #1890ff !important;
+  background-color: var(--primary-color) !important;
   color: #fff !important;
 }
+
 .el-menu-item.is-active {
-  background-color: #1890ff !important;
+  background-color: var(--primary-color) !important;
   color: #fff !important;
 }
 </style>

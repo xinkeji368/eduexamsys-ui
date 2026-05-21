@@ -152,26 +152,63 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import '@/assets/styles/variables.scss';
+
 .all {
-  padding: 0px 40px;
+  padding: 0 var(--spacing-lg);
+
   .page {
-    margin-top: 20px;
+    margin-top: var(--spacing-md);
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
   .edit {
-    margin-left: 20px;
+    margin-left: var(--spacing-md);
   }
+
   .el-table tr {
-    background-color: #dd5862 !important;
+    background-color: var(--bg-color) !important;
+    transition: background-color 0.3s;
+
+    &:hover > td {
+      background-color: var(--bg-color-hover) !important;
+    }
   }
 }
+
 .el-table .warning-row {
-  background: #000 !important;
+  background: var(--error-color) !important;
 }
 
 .el-table .success-row {
-  background: #dd5862;
+  background: var(--success-color);
+}
+
+.el-button--primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transition: all var(--transition-duration) var(--transition-function);
+
+  &:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+  }
+}
+
+.el-button--danger {
+  background-color: var(--error-color);
+  border-color: var(--error-color);
+  transition: all var(--transition-duration) var(--transition-function);
+
+  &:hover {
+    background-color: #d93636;
+    border-color: #d93636;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+  }
 }
 </style>

@@ -74,83 +74,132 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/styles/variables.scss';
+
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
 #topbar {
   position: relative;
   z-index: 10;
-  background-color: #304156;
+  background-color: var(--bg-color-page);
   height: 80px;
   line-height: 80px;
   color: #fff;
-  box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-medium);
 }
+
 #topbar .topbar-left {
   height: 80px;
   display: flex;
   justify-content: center;
+  align-items: center;
   background: rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
 }
+
 .topbar-left .icon-kaoshi {
   font-size: 60px;
+  color: var(--primary-color);
 }
+
 .topbar-left .title {
   font-size: 20px;
   cursor: pointer;
+  font-weight: 600;
+  color: #fff;
 }
+
 .topbar-right {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .topbar-right .user-img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
+
 .topbar-right .el-icon-menu {
   font-size: 30px;
-  margin-left: 20px;
+  margin-left: var(--spacing-md);
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--primary-hover);
+  }
 }
+
 .topbar-right .user {
   position: relative;
-  margin-right: 40px;
+  margin-right: var(--spacing-xl);
   display: flex;
+  align-items: center;
 }
+
 .topbar-right .user .user-img {
   margin-top: 15px;
-  margin-left: 10px;
+  margin-left: var(--spacing-sm);
   cursor: pointer;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
+
 .user .out {
   font-size: 14px;
   position: absolute;
   top: 80px;
-  right: 0px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 12px;
+  right: 0;
+  background-color: var(--bg-color);
+  box-shadow: var(--shadow-medium);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-small);
+  min-width: 120px;
 }
+
 .user .out ul {
   list-style: none;
 }
+
 .user .out ul > li {
   height: 26px;
   line-height: 26px;
+  transition: background-color 0.3s;
+  padding: 0 var(--spacing-sm);
+  border-radius: var(--border-radius-small);
+
+  &:hover {
+    background-color: var(--bg-color-hover);
+  }
 }
+
 .out a {
   text-decoration: none;
-  color: #000;
+  color: var(--text-color);
+  display: block;
 }
+
 .out .exit {
-  margin-top: 4px;
-  padding-top: 4px;
-  border-top: 1px solid #ccc;
+  margin-top: var(--spacing-xs);
+  padding-top: var(--spacing-xs);
+  border-top: 1px solid var(--border-color);
 }
 </style>
