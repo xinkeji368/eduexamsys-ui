@@ -81,6 +81,18 @@ export default new Router({
         {
           path: '/addTeacher',
           component: () => import ('@/components/admin/addTeacher')
+        },
+        {
+          path: '/selectExamToGrade',
+          component: () => import('@/components/teacher/selectExamToGrade')
+        },
+        {
+          path: '/gradeEssay',
+          component: () => import('@/components/teacher/gradeEssay')
+        },
+        {
+          path: '/addEssayQuestion',
+          component: () => import('@/components/teacher/addEssayQuestion')
         }
       ]
     },
@@ -94,7 +106,8 @@ export default new Router({
         {path: '/examMsg', component: () => import('@/components/student/examMsg')},
         {path: '/message', component: () => import('@/components/student/message')},
         {path: '/studentScore', component: () => import("@/components/student/answerScore")},
-        {path: '/scoreTable', component: () => import("@/components/student/scoreTable")}
+        {path: '/scoreTable', component: () => import("@/components/student/scoreTable")},
+        {path: '/essayScore', component: () => import("@/components/student/essayScore")}
       ]
     },
     {path: '/answer',component: () => import('@/components/student/answer')}
