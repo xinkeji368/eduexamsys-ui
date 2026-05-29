@@ -41,16 +41,16 @@
 
 <script>
 export default {
-  // name: 'myExam'
+  name: 'myExam',
   data() {
     return {
       loading: false,
-      key: null, //搜索关键字
-      allExam: null, //所有考试信息
-      pagination: { //分页后的考试信息
-        current: 1, //当前页
-        total: null, //记录条数
-        size: 10 //每页条数
+      key: null,
+      allExam: null,
+      pagination: {
+        current: 1,
+        total: null,
+        size: 10
       }
     }
   },
@@ -58,31 +58,22 @@ export default {
     this.getExamInfo()
     this.loading = true
   },
-  // watch: {
-
-  // },
   methods: {
-    //获取当前所有考试信息
     getExamInfo() {
       this.$axios(`/api/exams/${this.pagination.current}/${this.pagination.size}`).then(res => {
         this.pagination = res.data.data
         this.loading = false
-        console.log(this.pagination)
       }).catch(error => {
-        console.log(error)
       })
     },
-    //改变当前记录条数
     handleSizeChange(val) {
       this.pagination.size = val
       this.getExamInfo()
     },
-    //改变当前页码，重新发送请求
     handleCurrentChange(val) {
       this.pagination.current = val
       this.getExamInfo()
     },
-    //搜索试卷
     search() {
       this.$axios('/api/exams').then(res => {
         if(res.data.code == 200) {
@@ -94,12 +85,9 @@ export default {
         }
       })
     },
-    //跳转到试卷详情页
     toExamMsg(examCode) {
       this.$router.push({path: '/examMsg', query: {examCode: examCode}})
-      console.log(examCode)
     },
-    //返回上一页
     goBack() {
       this.$router.push({path: '/student'})
     }

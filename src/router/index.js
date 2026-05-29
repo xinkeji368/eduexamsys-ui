@@ -76,7 +76,7 @@ export default new Router({
         },
         {
           path: '/teacherManage',
-          component: () => import('@/components/admin/tacherManage')
+          component: () => import('@/components/admin/teacherManage')
         },
         {
           path: '/addTeacher',

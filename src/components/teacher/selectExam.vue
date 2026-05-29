@@ -28,7 +28,6 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="pagination.total" class="page">
     </el-pagination>
-    <!-- 编辑对话框-->
     <el-dialog
       title="编辑试卷信息"
       :visible.sync="dialogVisible"
@@ -82,11 +81,11 @@
 export default {
   data() {
     return {
-      form: {}, //保存点击以后当前试卷的信息
-      pagination: { //分页后的考试信息
-        current: 1, //当前页
-        total: null, //记录条数
-        size: 10 //每页条数
+      form: {},
+      pagination: {
+        current: 1,
+        total: null,
+        size: 10
       },
       dialogVisible: false
     }
@@ -95,21 +94,21 @@ export default {
     this.getExamInfo()
   },
   methods: {
-    edit(examCode) { //编辑试卷
+    edit(examCode) {
       this.dialogVisible = true
-      this.$axios(`/api/exam/${examCode}`).then(res => { //根据试卷id请求后台
+      this.$axios(`/api/exam/${examCode}`).then(res => {
         if(res.data.code == 200) {
           this.form = res.data.data
         }
       })
     },
-    handleClose(done) { //关闭提醒
+    handleClose(done) {
       this.$confirm('确认关闭？')
         .then(_ => {
           done();
         }).catch(_ => {});
     },
-    submit() { //提交修改后的试卷信息
+    submit() {
       this.dialogVisible = false
       this.$axios({
         url: '/api/exam',
@@ -119,7 +118,7 @@ export default {
         }
       }).then(res => {
         if(res.data.code == 200) {
-          this.$message({ //成功修改提示
+          this.$message({
             message: '更新成功',
             type: 'success'
           })
@@ -132,7 +131,7 @@ export default {
         confirmButtonText: '确定删除',
         cancelButtonText: '算了,留着',
         type: 'danger'
-      }).then(()=> { //确认删除
+      }).then(()=> {
         this.$axios({
           url: `/api/exam/${examCode}`,
           method: 'delete',
@@ -143,18 +142,16 @@ export default {
 
       })
     },
-    getExamInfo() { //分页查询所有试卷信息
+    getExamInfo() {
       this.$axios(`/api/exams/${this.pagination.current}/${this.pagination.size}`).then(res => {
         this.pagination = res.data.data
       }).catch(error => {
       })
     },
-    //改变当前记录条数
     handleSizeChange(val) {
       this.pagination.size = val
       this.getExamInfo()
     },
-    //改变当前页码，重新发送请求
     handleCurrentChange(val) {
       this.pagination.current = val
       this.getExamInfo()
@@ -170,9 +167,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  .edit{
-    margin-left: 20px;
   }
 }
 </style>

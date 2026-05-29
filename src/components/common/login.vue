@@ -63,9 +63,7 @@ export default {
     }
   },
   methods: {
-    //用户登录请求后台处理
     login() {
-      console.log("登录操作执行-------");
       this.$axios({
         url: `/api/login`,
         method: 'post',
@@ -75,7 +73,6 @@ export default {
       }).then(res=>{
         let resData = res.data.data
         if(resData != null) {
-          // 记住我功能
           if(this.rememberMe) {
             localStorage.setItem('username', this.formLabelAlign.username)
             localStorage.setItem('password', this.formLabelAlign.password)
@@ -87,26 +84,26 @@ export default {
           }
           
           switch(resData.role) {
-            case "0":  //管理员
+            case "0":
               this.$cookies.set("cname", resData.adminName)
               this.$cookies.set("cid", resData.adminId)
               this.$cookies.set("role", 0)
-              this.$router.push({path: '/index' }) //跳转到首页
+              this.$router.push({path: '/index' })
               break
-            case "1": //教师
+            case "1":
               this.$cookies.set("cname", resData.teacherName)
               this.$cookies.set("cid", resData.teacherId)
               this.$cookies.set("role", 1)
-              this.$router.push({path: '/index' }) //跳转到教师用户
+              this.$router.push({path: '/index' })
               break
-            case "2": //学生
+            case "2":
               this.$cookies.set("cname", resData.studentName)
               this.$cookies.set("cid", resData.studentId)
               this.$router.push({path: '/student'})
               break
           }
         }
-        if(resData == null) { //错误提示
+        if(resData == null) {
           this.$message({
             showClose: true,
             type: 'error',
@@ -121,7 +118,6 @@ export default {
   },
   computed: mapState(["userInfo"]),
   mounted() {
-    // 检查本地存储中是否有保存的登录信息
     if(localStorage.getItem('rememberMe') === 'true') {
       this.formLabelAlign.username = localStorage.getItem('username') || ''
       this.formLabelAlign.password = localStorage.getItem('password') || ''

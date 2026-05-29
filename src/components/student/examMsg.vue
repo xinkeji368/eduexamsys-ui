@@ -114,8 +114,8 @@ export default {
         res.data.data.examDate = res.data.data.examDate.substr(0,10)
         this.examData = { ...res.data.data}
         let paperId = this.examData.paperId
-        this.$axios(`/api/paper/${paperId}`).then(res => {  //通过paperId获取试题题目信息
-          this.topic = {...res.data}
+        this.$axios(`/api/paper/${paperId}`).then(res => {
+          this.topic = {...res.data.data}
           let keys = Object.keys(this.topic) //对象转数组
           keys.forEach(e => {
             let data = this.topic[e]

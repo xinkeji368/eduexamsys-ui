@@ -199,12 +199,9 @@ export default {
       // 拼接
       return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
     },
-    getCookies() {  //获取cookie
+    getCookies() {
       this.userInfo.name = this.$cookies.get("cname")
       this.userInfo.id = this.$cookies.get("cid")
-    },
-    calcuScore() { //计算答题分数
-      
     },
     getExamData() { //获取当前试卷所有信息
       let date = new Date()
@@ -215,8 +212,8 @@ export default {
         this.index = 0
         this.time = this.examData.totalScore //获取分钟数
         let paperId = this.examData.paperId
-        this.$axios(`/api/paper/${paperId}`).then(res => {  //通过paperId获取试题题目信息
-          this.topic = {...res.data}
+        this.$axios(`/api/paper/${paperId}`).then(res => {
+          this.topic = {...res.data.data}
           let reduceAnswer = this.topic[1][this.index]
           this.reduceAnswer = reduceAnswer
           let keys = Object.keys(this.topic) //对象转数组
@@ -243,7 +240,7 @@ export default {
         })
       })
     },
-    change(index) { //选择题
+    change(index) {
       this.index = index
       let reduceAnswer = this.topic[1][this.index]
       this.reduceAnswer = reduceAnswer
@@ -254,12 +251,9 @@ export default {
         if(this.index <= 0){
           this.index = 0
         }
-        console.log(`总长度${len}`)
-        console.log(`当前index:${index}`)
         this.title = "请选择正确的选项"
         let Data = this.topic[1]
-        // console.log(Data)
-        this.showQuestion = Data[this.index].question //获取题目信息
+        this.showQuestion = Data[this.index].question
         this.showAnswer = Data[this.index]
         this.number = this.index + 1
       }else if(this.index >= len) {
@@ -272,7 +266,7 @@ export default {
         this.fillAnswer[this.index][3] = true
       }
     },
-    fill(index) { //填空题
+    fill(index) {
       let len = this.topic[2].length
       this.currentType = 2
       this.index = index
@@ -281,13 +275,10 @@ export default {
           index = this.topic[1].length -1
           this.change(index)
         }else {
-          console.log(`总长度${len}`)
-          console.log(`当前index:${index}`)
           this.title = "请在横线处填写答案"
           let Data = this.topic[2]
-          console.log(Data)
-          this.showQuestion = Data[index].question //获取题目信息
-          let part= this.showQuestion.split("()").length -1 //根据题目中括号的数量确定填空横线数量
+          this.showQuestion = Data[index].question
+          let part= this.showQuestion.split("()").length -1
           this.part = part
           this.number = this.topicCount[0] + index + 1
         } 
@@ -296,7 +287,7 @@ export default {
         this.judge(this.index)
       }
     },
-    judge(index) { //判断题
+    judge(index) {
       let len = this.topic[3].length
       this.currentType = 3
       this.index = index
@@ -305,12 +296,9 @@ export default {
           this.index = this.topic[2].length - 1
           this.fill(this.index)
         }else {
-          console.log(`总长度${len}`)
-          console.log(`当前index:${this.index}`)
           this.title = "请作出正确判断"
           let Data = this.topic[3]
-          console.log(Data)
-          this.showQuestion = Data[index].question //获取题目信息
+          this.showQuestion = Data[index].question
           this.number = this.topicCount[0] + this.topicCount[1] + index + 1
         }
       }else if (this.index >= len) {
@@ -396,26 +384,19 @@ export default {
             case 4:
               right = "D"
           }
-          if(right == this.topic[1][index].rightAnswer) { // 当前选项与正确答案对比
-            finalScore += this.topic[1][index].score // 计算总分数
+          if(right == this.topic[1][index].rightAnswer) {
+            finalScore += this.topic[1][index].score
           }
-          console.log(right,this.topic[1][index].rightAnswer)
         }
-        // console.log(topic1Answer)
       })
-      /**计算判断题总分 */
-      // console.log(`this.fillAnswer${this.fillAnswer}`)
-      // console.log(this.topic[2][this.index])
       let fillAnswer = this.fillAnswer
-      fillAnswer.forEach((element,index) => { //此处index和 this.index数据不一致，注意
+      fillAnswer.forEach((element,index) => {
         element.forEach((inner) => {
-          if(this.topic[2][index].answer.includes(inner)) { //判断填空答案是否与数据库一致
-            console.log("正确")
+          if(this.topic[2][index].answer.includes(inner)) {
             finalScore += this.topic[2][this.index].score
           }
         })
       });
-      /** 计算判断题总分 */
       let topic3Answer = this.judgeAnswer
       topic3Answer.forEach((element,index) => {
         let right = null
@@ -426,31 +407,28 @@ export default {
           case 2:
             right = "F"
         }
-        if(right == this.topic[3][index].answer) { // 当前选项与正确答案对比
-            finalScore += this.topic[3][index].score // 计算总分数
+        if(right == this.topic[3][index].answer) {
+            finalScore += this.topic[3][index].score
           }
       })
-      console.log(`目前总分${finalScore}`)
       if(this.time != 0) {
         this.$confirm("考试结束时间未到,是否提前交卷","友情提示",{
           confirmButtonText: '立即交卷',
           cancelButtonText: '再检查一下',
           type: 'warning'
         }).then(() => {
-          console.log("交卷")
           let date = new Date()
           this.endTime = this.getTime(date)
           let answerDate = this.endTime.substr(0,10)
-          //提交成绩信息
           this.$axios({
             url: '/api/score',
             method: 'post',
             data: {
-              examCode: this.examData.examCode, //考试编号
-              studentId: this.userInfo.id, //学号
-              subject: this.examData.source, //课程名称
-              etScore: finalScore, //答题成绩
-              answerDate: answerDate, //答题日期
+              examCode: this.examData.examCode,
+              studentId: this.userInfo.id,
+              subject: this.examData.source,
+              etScore: finalScore,
+              answerDate: answerDate,
             }
           }).then(res => {
             if(res.data.code == 200) {
@@ -462,11 +440,10 @@ export default {
             }  
           })
         }).catch(() => {
-          console.log("继续答题")
         })
       }
     },
-    showTime() { //倒计时
+    showTime() {
       setInterval(() => {
         this.time -= 1
         if(this.time == 10) {
@@ -475,9 +452,6 @@ export default {
             type: 'error',
             message: '考生注意,考试时间还剩10分钟！！！'
           })
-          if(this.time == 0) {
-            console.log("考试时间已到,强制交卷。")
-          }
         }
       },1000 * 60)
     }

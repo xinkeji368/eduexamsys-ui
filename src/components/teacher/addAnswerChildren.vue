@@ -1,4 +1,3 @@
-// 添加题库
 <template>
   <div class="add">
     <el-tabs v-model="activeName">
@@ -266,11 +265,11 @@
 export default {
   data() {
     return {
-      changeNumber: null, //选择题出题数量
-      fillNumber: null, //填空题出题数量
-      judgeNumber: null, //判断题出题数量
-      activeName: 'first',  //活动选项卡
-      options: [ //题库类型
+      changeNumber: null,
+      fillNumber: null,
+      judgeNumber: null,
+      activeName: 'first',
+      options: [
         {
           value: '选择题',
           label: '选择题'
@@ -284,7 +283,7 @@ export default {
           label: '判断题'
         },
       ],
-      difficulty: [ //试题难度
+      difficulty: [
         {
           value: '简单',
           label: '简单'
@@ -299,7 +298,7 @@ export default {
         }
       ],
       difficultyValue: '简单',
-      levels: [ //难度等级
+      levels: [
         {
           value: '1',
           label: '1'
@@ -321,7 +320,7 @@ export default {
           label: '5'
         },
       ],
-      rights: [ //正确答案
+      rights: [
         {
           value: 'A',
           label: 'A'
@@ -340,39 +339,39 @@ export default {
         },
       ],
       paperId: null,
-      optionValue: '选择题', //题型选中值
-      subject: '', //试卷名称用来接收路由参数
-      postChange: { //选择题提交内容
-        subject: '', //试卷名称
-        level: '', //难度等级选中值
-        rightAnswer: '', //正确答案选中值
-        section: '', //对应章节
-        question: '', //题目
-        analysis: '', //解析
+      optionValue: '选择题',
+      subject: '',
+      postChange: {
+        subject: '',
+        level: '',
+        rightAnswer: '',
+        section: '',
+        question: '',
+        analysis: '',
         answerA: '',
         answerB: '',
         answerC: '',
         answerD: '',
       },
-      postFill: { //填空题提交内容
-        subject: '', //试卷名称
-        level: '', //难度等级选中值
-        answer: '', //正确答案
-        section: '', //对应章节
-        question: '', //题目
-        analysis: '', //解析
+      postFill: {
+        subject: '',
+        level: '',
+        answer: '',
+        section: '',
+        question: '',
+        analysis: '',
       },
-      postJudge: { //判断题提交内容
-        subject: '', //试卷名称
-        level: '', //难度等级选中值
-        answer: '', //正确答案
-        section: '', //对应章节
-        question: '', //题目
-        analysis: '', //解析
+      postJudge: {
+        subject: '',
+        level: '',
+        answer: '',
+        section: '',
+        question: '',
+        analysis: '',
       },
-      postPaper: { //考试管理表对应字段
+      postPaper: {
         paperId: null,
-        questionType: null, // 试卷类型 1--选择题  2--填空题   3--判断题
+        questionType: null,
         questionId: null,
       }
     };
@@ -381,9 +380,6 @@ export default {
     this.getParams()
   },
   methods: {
-    // handleClick(tab, event) {
-    //   console.log(tab, event);
-    // },
     create() {
       this.$axios({
         url: '/api/item',
@@ -393,10 +389,9 @@ export default {
           fillNumber: this.fillNumber,
           judgeNumber: this.judgeNumber,
           paperId: this.paperId,
-          subject: '计算机网络' //题目数量太少，指定为计算机网络出题
+          subject: '计算机网络'
         }
       }).then(res => {
-        console.log(res)
         let data = res.data
         if(data.code==200){
           setTimeout(() => {
@@ -418,33 +413,30 @@ export default {
     expurgate() {
       this.$axios({
         url: '/api/expurgate',
-        //dataType:"json",
         method: 'post',
         data: {
           paperId: this.paperId,
         }
       }).then(res => {
-        console.log(JSON.stringify(res));
-        alert(JSON.stringify(res));
           window.location.href = "http://localhost:8088/#/addAnswer"
       })
     },
     getParams() {
-      let subject = this.$route.query.subject //获取试卷名称
-      let paperId = this.$route.query.paperId //获取paperId
+      let subject = this.$route.query.subject
+      let paperId = this.$route.query.paperId
       this.paperId = paperId
       this.subject = subject
       this.postPaper.paperId = paperId
     },
-    changeSubmit() { //选择题题库提交
+    changeSubmit() {
       this.postChange.subject = this.subject
-      this.$axios({ //提交数据到选择题题库表
+      this.$axios({
         url: '/api/MultiQuestion',
         method: 'post',
         data: {
           ...this.postChange
         }
-      }).then(res => { //添加成功显示提示
+      }).then(res => {
         let status = res.data.code
         if(status == 200) {
           this.$message({
@@ -454,7 +446,7 @@ export default {
           this.postChange = {}
         }
       }).then(() => {
-        this.$axios(`/api/multiQuestionId`).then(res => { //获取当前题目的questionId
+        this.$axios(`/api/multiQuestionId`).then(res => {
           let questionId = res.data.data.questionId
           this.postPaper.questionId = questionId
           this.postPaper.questionType = 1
@@ -468,7 +460,7 @@ export default {
         })
       })
     },
-    fillSubmit() { //填空题提交
+    fillSubmit() {
       this.postFill.subject = this.subject
       this.$axios({
         url: '/api/fillQuestion',
@@ -486,7 +478,7 @@ export default {
           this.postFill = {}
         }
       }).then(() => {
-        this.$axios(`/api/fillQuestionId`).then(res => { //获取当前题目的questionId
+        this.$axios(`/api/fillQuestionId`).then(res => {
           let questionId = res.data.data.questionId
           this.postPaper.questionId = questionId
           this.postPaper.questionType = 2
@@ -500,7 +492,7 @@ export default {
         })
       })
     },
-    judgeSubmit() { //判断题提交
+    judgeSubmit() {
       this.postJudge.subject = this.subject
       this.$axios({
         url: '/api/judgeQuestion',
@@ -518,7 +510,7 @@ export default {
           this.postJudge = {}
         }
       }).then(() => {
-        this.$axios(`/api/judgeQuestionId`).then(res => { //获取当前题目的questionId
+        this.$axios(`/api/judgeQuestionId`).then(res => {
           let questionId = res.data.data.questionId
           this.postPaper.questionId = questionId
           this.postPaper.questionType = 3

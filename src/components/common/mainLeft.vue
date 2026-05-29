@@ -44,10 +44,8 @@ export default {
   },
   methods: {
     handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
-      // console.log(key, keyPath);
     },
     //点击标题传递参数给navigator组件
     handleTitle(index) {

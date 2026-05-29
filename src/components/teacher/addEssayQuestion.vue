@@ -149,7 +149,6 @@ export default {
         }
       }).catch(error => {
         this.loading = false
-        console.log(error)
       })
     },
     onSubmit() {

@@ -1,4 +1,3 @@
-//查询所有题库
 <template>
   <div class="exam">
     <el-table :data="pagination.records" border :row-class-name="tableRowClassName">
@@ -27,10 +26,9 @@ export default {
   data() {
     return {
       pagination: {
-        //分页后的考试信息
-        current: 1, //当前页
-        total: null, //记录条数
-        size: 10 //每页条数
+        current: 1,
+        total: null,
+        size: 10
       }
     };
   },
@@ -39,22 +37,18 @@ export default {
   },
   methods: {
     getAnswerInfo() {
-      //分页查询所有试卷信息
       this.$axios(
         `/api/answers/${this.pagination.current}/${this.pagination.size}`
       )
         .then(res => {
           this.pagination = res.data.data;
-          console.log(res);
         })
         .catch(error => {});
     },
-    //改变当前记录条数
     handleSizeChange(val) {
       this.pagination.size = val;
       this.getAnswerInfo();
     },
-    //改变当前页码，重新发送请求
     handleCurrentChange(val) {
       this.pagination.current = val;
       this.getAnswerInfo();

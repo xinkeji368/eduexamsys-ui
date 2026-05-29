@@ -13,9 +13,9 @@ export default {
   name: "grade",
   data() {
     return {
-      isNull: false, //原始数据
-      tableDataX: [], //x轴数据 保存次数
-      tableDataY: [], //y轴数据 保存分数
+      isNull: false,
+      tableDataX: [],
+      tableDataY: [],
     }
   },
   mounted() {
@@ -24,8 +24,7 @@ export default {
   methods: {
     score() {
       let studentId = this.$route.query.studentId
-      this.$axios(`/api/score/${studentId}`).then(res => { //根据学生Id查询成绩
-        console.log(res)
+      this.$axios(`/api/score/${studentId}`).then(res => {
         if(res.data.code == 200) {
           let rootData = res.data.data
           rootData.forEach((element,index) => {
@@ -51,9 +50,6 @@ export default {
             ]
           };
           scoreCharts.setOption(option);
-          scoreCharts.on("mouseover", params => {
-            console.log(params.value);
-          });
         }else {
           this.isNull = true
         }

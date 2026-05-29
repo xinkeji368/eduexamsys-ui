@@ -149,7 +149,6 @@ export default {
         inputErrorMessage: '回复不能为空'
       }).then(({ value }) => {
         let date = new Date()
-        console.log(messageId)
         this.$axios({
           url: '/api/replay',
           method: 'post',
