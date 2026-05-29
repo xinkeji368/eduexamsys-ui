@@ -1,4 +1,3 @@
-<!-- 用户登录界面 -->
 <template>
   <div id="login">
     <div class="bg"></div>
@@ -10,18 +9,23 @@
         <div class="bottom">
           <div class="container">
             <p class="title">用户登录</p>
-            <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-              <el-form-item label="用户名">
-                <el-input v-model.number="formLabelAlign.username" placeholder="请输入用户名"></el-input>
+            <el-form
+              ref="loginForm"
+              :model="loginForm"
+              :rules="loginRules"
+              label-position="left"
+              label-width="80px">
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model.number="loginForm.username" placeholder="请输入用户名"></el-input>
               </el-form-item>
-              <el-form-item label="密码">
-                <el-input v-model="formLabelAlign.password" placeholder="请输入密码" type='password'></el-input>
+              <el-form-item label="密码" prop="password">
+                <el-input v-model="loginForm.password" placeholder="请输入密码" type="password" @keyup.enter.native="handleLogin"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-checkbox v-model="rememberMe">记住我</el-checkbox>
               </el-form-item>
               <div class="submit">
-                <el-button type="primary" class="row-login" @click="login()">登录</el-button>
+                <el-button type="primary" class="row-login" :loading="loading" @click="handleLogin">登录</el-button>
               </div>
               <div class="options">
                 <p class="find"><a href="javascript:;">找回密码</a></p>
@@ -37,91 +41,87 @@
     </el-row>
     <el-row class="footer">
       <el-col>
-        <p class="msg2">版权所有 ©2023 <!--2023计算机科学与技术2班张尧--> 保留所有权利  <a href="http://beian.miit.gov.cn/" target="_blank">ICP备9527号</a></p>
+        <p class="msg2">版权所有 ©2023 保留所有权利  <a href="http://beian.miit.gov.cn/" target="_blank">ICP备9527号</a></p>
       </el-col>
-
-
     </el-row>
   </div>
 </template>
 
 <script>
-import store from '@/vuex/store'
-import {mapState} from 'vuex'
+import { login } from '@/api/auth'
+import storage from '@/utils/storage'
+
+const roleHomeMap = {
+  '0': '/admin',
+  '1': '/teacher',
+  '2': '/student'
+}
+
 export default {
-  store,
-  name: "login",
+  name: 'login',
   data() {
     return {
-      role: 2,
-      labelPosition: 'left',
-      formLabelAlign: {
+      loginForm: {
         username: '',
         password: ''
       },
-      rememberMe: false
+      loginRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 3, message: '密码长度不能少于3位', trigger: 'blur' }
+        ]
+      },
+      rememberMe: false,
+      loading: false
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('rememberMe') === 'true') {
+      this.loginForm.username = Number(localStorage.getItem('username')) || ''
+      this.loginForm.password = localStorage.getItem('password') || ''
+      this.rememberMe = true
     }
   },
   methods: {
-    login() {
-      this.$axios({
-        url: `/api/login`,
-        method: 'post',
-        data: {
-          ...this.formLabelAlign
-        }
-      }).then(res=>{
-        let resData = res.data.data
-        if(resData != null) {
-          if(this.rememberMe) {
-            localStorage.setItem('username', this.formLabelAlign.username)
-            localStorage.setItem('password', this.formLabelAlign.password)
-            localStorage.setItem('rememberMe', 'true')
-          } else {
-            localStorage.removeItem('username')
-            localStorage.removeItem('password')
-            localStorage.removeItem('rememberMe')
-          }
-          
-          switch(resData.role) {
-            case "0":
-              this.$cookies.set("cname", resData.adminName)
-              this.$cookies.set("cid", resData.adminId)
-              this.$cookies.set("role", 0)
-              this.$router.push({path: '/index' })
-              break
-            case "1":
-              this.$cookies.set("cname", resData.teacherName)
-              this.$cookies.set("cid", resData.teacherId)
-              this.$cookies.set("role", 1)
-              this.$router.push({path: '/index' })
-              break
-            case "2":
-              this.$cookies.set("cname", resData.studentName)
-              this.$cookies.set("cid", resData.studentId)
-              this.$router.push({path: '/student'})
-              break
-          }
-        }
-        if(resData == null) {
-          this.$message({
-            showClose: true,
-            type: 'error',
-            message: '用户名或者密码错误'
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (!valid) return
+        this.loading = true
+        login(this.loginForm)
+          .then(res => {
+            const data = res.data
+            if (this.rememberMe) {
+              localStorage.setItem('username', this.loginForm.username)
+              localStorage.setItem('password', this.loginForm.password)
+              localStorage.setItem('rememberMe', 'true')
+            } else {
+              localStorage.removeItem('username')
+              localStorage.removeItem('password')
+              localStorage.removeItem('rememberMe')
+            }
+
+            this.$store.dispatch('user/login', {
+              token: data.token,
+              userInfo: {
+                id: data.userId,
+                name: data.userName,
+                role: data.role
+              }
+            })
+
+            const homePath = roleHomeMap[data.role] || '/'
+            this.$router.push(homePath)
           })
-        }
+          .catch(() => {
+            this.$message.error('用户名或密码错误')
+          })
+          .finally(() => {
+            this.loading = false
+          })
       })
-    },
-    clickTag(key) {
-      this.role = key
-    }
-  },
-  computed: mapState(["userInfo"]),
-  mounted() {
-    if(localStorage.getItem('rememberMe') === 'true') {
-      this.formLabelAlign.username = localStorage.getItem('username') || ''
-      this.formLabelAlign.password = localStorage.getItem('password') || ''
-      this.rememberMe = true
     }
   }
 }
@@ -129,28 +129,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables.scss';
-
-.remind {
-  border-radius: var(--border-radius-medium);
-  padding: var(--spacing-sm) var(--spacing-md);
-  display: flex;
-  position: fixed;
-  right: var(--spacing-lg);
-  bottom: 50%;
-  flex-direction: column;
-  color: var(--text-color-secondary);
-  background-color: var(--bg-color);
-  border-left: 4px solid var(--primary-color);
-  box-shadow: var(--shadow-medium);
-}
-
-.container {
-  margin-bottom: var(--spacing-xl);
-
-  .el-radio-group {
-    margin: var(--spacing-lg) 0;
-  }
-}
 
 a:link {
   color: var(--warning-color);
@@ -253,12 +231,6 @@ a:link {
     margin-top: var(--spacing-xl);
     text-align: center;
 
-    .msg1 {
-      font-size: 18px;
-      color: #fff;
-      margin-bottom: var(--spacing-sm);
-    }
-
     .msg2 {
       font-size: 14px;
       color: rgba(255, 255, 255, 0.7);
@@ -280,15 +252,6 @@ a:link {
     color: var(--warning-color);
     display: flex;
     justify-content: space-between;
-
-    > a {
-      color: var(--warning-color);
-      transition: color 0.3s;
-
-      &:hover {
-        color: var(--primary-hover);
-      }
-    }
 
     .register {
       span:nth-child(1) {

@@ -1,22 +1,21 @@
-<!-- 顶部信息栏 -->
 <template>
   <header id="topbar">
     <el-row>
       <el-col :span="4" class="topbar-left">
         <i class="iconfont icon-kaoshi"></i>
-        <span class="title" @click="index()">学生练习考试测试系统</span>
+        <span class="title" @click="goHome">学生练习考试测试系统</span>
       </el-col>
       <el-col :span="20" class="topbar-right">
-        <i class="el-icon-menu" @click="toggle()"></i>
+        <i class="el-icon-menu" @click="toggleSidebar"></i>
         <div class="user">
-          <span>{{user.userName}}</span>
-          <img src="@/assets/img/userimg.png" class="user-img" ref="img" @click="showSetting()" />
+          <span>{{ userName }}</span>
+          <img src="@/assets/img/userimg.png" class="user-img" @click="showSetting" />
           <transition name="fade">
-            <div class="out" ref="out" v-show="login_flag">
+            <div class="out" v-show="loginFlag">
               <ul>
                 <li><a href="javascript:;">用户信息</a></li>
                 <li><a href="javascript:;">设置</a></li>
-                <li class="exit" @click="exit()"><a href="javascript:;">退出登录</a></li>
+                <li class="exit" @click="handleLogout"><a href="javascript:;">退出登录</a></li>
               </ul>
             </div>
           </transition>
@@ -27,50 +26,56 @@
 </template>
 
 <script>
-import store from '@/vuex/store'
-import {mapState,mapMutations} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
+const roleHomeMap = {
+  '0': '/admin',
+  '1': '/teacher',
+  '2': '/student'
+}
+
 export default {
   data() {
     return {
-      login_flag: false,
-      user: { //用户信息
-        userName: null,
-        userId: null
-      }
+      loginFlag: false
     }
+  },
+  computed: {
+    ...mapGetters('user', ['userName', 'userRole'])
   },
   created() {
-    this.getUserInfo()
+    document.addEventListener('click', this.handleClickOutside)
   },
-  computed: mapState(["flag","menu"]),
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside)
+  },
   methods: {
-    //显示、隐藏退出按钮
+    ...mapActions('user', ['logout']),
+
     showSetting() {
-      this.login_flag = !this.login_flag
+      this.loginFlag = !this.loginFlag
     },
-    //左侧栏放大缩小
-    ...mapMutations(["toggle"]),
-    getUserInfo() { //获取用户信息
-      let userName = this.$cookies.get("cname")
-      let userId = this.$cookies.get("cid")
-      this.user.userName = userName
-      this.user.userId = userId
-    },
-    index() {
-      this.$router.push({path: '/index'})
-    },
-    exit() {
-      let role = this.$cookies.get("role")
-      this.$router.push({path:"/"}) //跳转到登录页面
-      this.$cookies.remove("cname") //清除cookie
-      this.$cookies.remove("cid")
-      this.$cookies.remove("role")
-      if(role == 0) {
-        this.menu.pop()
+
+    handleClickOutside(e) {
+      if (this.loginFlag && !this.$el.contains(e.target)) {
+        this.loginFlag = false
       }
+    },
+
+    toggleSidebar() {
+      this.$store.commit('user/TOGGLE_SIDEBAR')
+    },
+
+    goHome() {
+      const homePath = roleHomeMap[this.userRole] || '/'
+      this.$router.push(homePath)
+    },
+
+    handleLogout() {
+      this.logout()
+      this.$router.push('/')
     }
-  },
-  store
+  }
 }
 </script>
 

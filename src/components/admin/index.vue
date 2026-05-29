@@ -1,10 +1,9 @@
-// 展示组件页面
 <template>
   <div id="index">
-    <header1 class="topbar"></header1>
+    <app-header class="topbar"></app-header>
     <section class="container">
       <div class="left_side">
-        <mainLeft></mainLeft>
+        <main-left></main-left>
       </div>
       <div class="main_wrapper">
         <navigator class="nav"></navigator>
@@ -15,22 +14,15 @@
 </template>
 
 <script>
-import header from '@/components/common/header'
-import mainLeft from '@/components/common/mainLeft'
-import navigator from '@/components/common/navigator'
-export default {
-  components:{
-    header1: header,
-    mainLeft: mainLeft,
-    navigator:navigator
-  },
-  data() {
-    return {
-      username: '致敬程序员'
-    }
-  },
-  methods: {
+import AppHeader from '@/components/common/header'
+import MainLeft from '@/components/common/mainLeft'
+import Navigator from '@/components/common/navigator'
 
+export default {
+  components: {
+    AppHeader,
+    MainLeft,
+    Navigator
   }
 }
 </script>
@@ -50,4 +42,3 @@ export default {
   background-color: #fff;
 }
 </style>
-
